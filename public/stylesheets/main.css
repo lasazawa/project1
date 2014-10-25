@@ -1,0 +1,91 @@
+body {
+    font-family: 'Raleway', 'Helvetica Neue', sans-serif;
+}
+
+p {
+    line-height: 1.5em;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+a{
+    color: rgba(225,40,90,1);
+    font-weight: 500;
+}
+a:hover {
+    color: rgba(200,15,60,1)
+}
+.date {
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 0;
+}
+.hero {
+    background-image: url(/images/lights13.jpg) ;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height:100vh;
+}
+
+#heading {
+    padding: 15px 0 25px;
+    margin: 40px 0;
+    border-top: solid 1px rgba(255,255,255, 0.3);
+    border-bottom: solid 1px rgba(255,255,255, 0.3);
+}
+#heading h1 {
+    font-size: 52px;
+}
+
+/* NAV */
+.nav {
+    height: 56px;
+    width: 100%;
+    background-color: rgba(0,0,0,0.85);
+    padding:6px 0;
+}
+.logo{
+    float: left;
+    height: 40px;
+    width: 40px;
+    border-radius: 18px;
+    background-color: white;
+}
+.user {
+    float: right;
+    padding:10px 0;
+}
+.subnav {
+    height: 36px;
+    width: 100%;
+    padding:8px 0;
+    background-color: rgba(225,40,90,0.7);
+    background: -webkit-linear-gradient(left, rgba(225,40,90,1), rgba(200,0,145,1)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, rgba(225,40,90,1), rgba(200,0,145,1)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, rgba(225,40,90,1), rgba(200,0,145,1)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, rgba(225,40,90,1), rgba(200,0,145,1)); /* Standard syntax */
+}
+/* END NAV */
+
+
+.white {
+    color: white;
+}
+
+.gray {
+    color: rgba(0,0,0,0.45);
+}
+
+.footer {
+    padding: 20px 0;
+}
+.footer a {
+    font-size: 12px;
+    font-weight: 700;
+}
+@media (max-width: 767) {
+
+}
