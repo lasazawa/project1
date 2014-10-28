@@ -10,7 +10,9 @@ p {
 
 h5 {
     font-weight: 700;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
+    margin-top: 12px;
+    font-size: 16px;
 }
 
 a{
@@ -93,12 +95,19 @@ a:hover {
     text-decoration: none;
 }
 
+.jamtrkr {
+    font-weight: 700;
+    font-size: 22px;
+    color:rgba(255,255,255, 0.3);
+    margin-top: 7px;
+}
+
 /* END NAV */
 
 /* EVENT LIST */
 
 #eventList {
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 #eventHeader {
@@ -112,8 +121,26 @@ a:hover {
     border-bottom: solid 1px rgba(0,0,0,0.1);
     width: 100%;
     padding: 0 10px;
+    display: table;
 }
 
+#eventItem:hover {
+    background-color: rgba(225,40,90,0.05);
+}
+
+#eventItem p {
+    margin-bottom: 0;
+}
+
+#eventItem .col-md-8 {
+    padding: 0;
+}
+
+iframe {
+    float: left;
+    height: 80px;
+    margin: 10px 0;
+}
 
 /* END EVENT LIST */
 
@@ -130,12 +157,12 @@ a:hover {
 }
 
 .footer {
-    padding: 20px 0;
+    padding: 30px 0 25px;
     background-color: rgba(0,0,0,0.05);
     width: 100%;
     margin-top: 40px;
 }
-.footer a {
+.footer p {
     font-size: 12px;
     font-weight: 700;
     padding-right: 40px;

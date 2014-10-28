@@ -17,6 +17,10 @@ app.get('/', function(req, res) {
     res.render('index');
 });
 
+app.get('/datepicker', function(req, res) {
+    res.render('datepicker');
+});
+
 // app.get('/home', function(req, res) {
 //     var artist = "https://api.spotify.com/v1/search?q=shakira&type=artist";
 //     res.render('home');

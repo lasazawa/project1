@@ -15,6 +15,6 @@
     "querystring": "^0.2.0",
     "request": "^2.46.0",
     "sequelize-cli": "^0.3.3",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
   }
 }

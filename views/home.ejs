@@ -17,20 +17,22 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="col-md-12">
+            <h2>San Francisco, CA</h2>
             <div id="eventList">
                 <div id="eventHeader">
-                    <p class="primary-color"><%= listOfEvents.length %> Events</p>
+                    <p class="primary-color"><%= listOfEvents.length %> Shows</p>
                 </div>
                 <% listOfEvents.forEach(function(event) { %>
                     <div id="eventItem">
-                        <h5><%= event.performance[0].displayName %></h5>
-                        <p><%= event.venue.displayName %></p>
-                            <iframe src="https://embed.spotify.com/?uri=spotify:trackset:PREFEREDTITLE:5Z7ygHQo02SUrFmcgpwsKW,1x6ACsKV4UdWS2FMuPFUiT,4bi73jCM02fMpkI11Lqmfe" frameborder="0" allowtransparency="true"></iframe>
+                        <div class="col-md-8">
+                            <h5><%= event.performance[0].displayName %></h5>
+                            <p><span><%= event.start.time %></span> at <span><%= event.venue.displayName %></span></p>
+                            <p><%= event.location.city %></p>
+                        </div>
+                        <iframe src="https://embed.spotify.com/?uri=spotify:trackset:PREFEREDTITLE:5Z7ygHQo02SUrFmcgpwsKW,1x6ACsKV4UdWS2FMuPFUiT,4bi73jCM02fMpkI11Lqmfe" frameborder="0" allowtransparency="true"></iframe>
                     </div>
                 <% }) %>
-<iframe src="https://embed.spotify.com/?uri=spotify:track:4th1RQAelzqgY7wL53UGQt" width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
-
             </div>
 
             </div>
