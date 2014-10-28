@@ -8,6 +8,11 @@ p {
     font-size: 14px;
 }
 
+h5 {
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
 a{
     color: rgba(225,40,90,1);
     font-weight: 500;
@@ -22,7 +27,7 @@ a:hover {
     margin-bottom: 0;
 }
 .hero {
-    background-image: url(/images/lights13.jpg) ;
+    /*background-image: url(/images/lights13.jpg) ;*/
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -52,7 +57,7 @@ a:hover {
     height: 40px;
     width: 40px;
     border-radius: 18px;
-    background-color: white;
+    background-color: rgba(255,255,255, 0.3);
 }
 .user {
     float: right;
@@ -61,18 +66,63 @@ a:hover {
 .subnav {
     height: 36px;
     width: 100%;
-    padding:8px 0;
+    padding:4px 0;
     background-color: rgba(225,40,90,0.7);
     background: -webkit-linear-gradient(left, rgba(225,40,90,1), rgba(200,0,145,1)); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(right, rgba(225,40,90,1), rgba(200,0,145,1)); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(right, rgba(225,40,90,1), rgba(200,0,145,1)); /* For Firefox 3.6 to 15 */
     background: linear-gradient(to right, rgba(225,40,90,1), rgba(200,0,145,1)); /* Standard syntax */
 }
+
+.glyphicon-calendar {
+    padding-right: 6px;
+}
+
+.datePicker {
+    background-color: rgba(190,10,90,0.5);
+    padding:4px 10px 3px;
+    display: inline-block;
+    border-radius: 4px;
+}
+.datePicker:hover {
+    background-color: rgba(190,10,90,1);
+    text-decoration: none;
+}
+
+.datePicker:hover a {
+    text-decoration: none;
+}
+
 /* END NAV */
 
+/* EVENT LIST */
+
+#eventList {
+    margin-top: 15px;
+}
+
+#eventHeader {
+    background-color: rgba(0,0,0,0.03);
+    border-bottom: solid 1px rgba(0,0,0,0.1);
+    border-top: solid 1px rgba(0,0,0,0.1);
+    padding:10px 10px 0;
+}
+
+#eventItem {
+    border-bottom: solid 1px rgba(0,0,0,0.1);
+    width: 100%;
+    padding: 0 10px;
+}
+
+
+/* END EVENT LIST */
 
 .white {
     color: white;
+}
+
+.primary-color{
+    color: rgba(225,40,90,1);
 }
 
 .gray {
@@ -81,11 +131,27 @@ a:hover {
 
 .footer {
     padding: 20px 0;
+    background-color: rgba(0,0,0,0.05);
+    width: 100%;
+    margin-top: 40px;
 }
 .footer a {
     font-size: 12px;
     font-weight: 700;
+    padding-right: 40px;
 }
-@media (max-width: 767) {
+
+
+@media (max-width: 767px) {
+
+.col-md-12,.col-sm-12,.col-xs-12 {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.logo, .datePicker {
+    margin-left: 10px;
+}
 
 }
+

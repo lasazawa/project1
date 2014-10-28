@@ -1,15 +1,41 @@
 <% include partials/header %>
 <% include partials/nav %>
-<% include partials/subnav %>
+
+<div class="subnav">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Home is here..</h1>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut quis dui leo. In imperdiet nunc id erat sodales accumsan. Suspendisse vel dignissim nulla. Nunc ut porta ligula, vitae porta justo. Vestibulum egestas nulla sit amet orci placerat lacinia. Pellentesque eleifend, nunc vel venenatis aliquam, quam odio dignissim eros, sed sollicitudin orci ligula sit amet urna. <a href="#">Fusce viverra</a>  libero eget mauris maximus eleifend. Duis quis leo blandit, eleifend velit at, bibendum odio. <span class="gray">Morbi dapibus vel metus id eleifend. Donec ac erat sed lectus tincidunt sollicitudin.</span>
-            </p>
+                <div class="datePicker">
+                    <a href="#">
+                        <p class="date white"><span class="glyphicon glyphicon-calendar" ></span>Today, October 29</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+            <div id="eventList">
+                <div id="eventHeader">
+                    <p class="primary-color"><%= listOfEvents.length %> Events</p>
+                </div>
+                <% listOfEvents.forEach(function(event) { %>
+                    <div id="eventItem">
+                        <h5><%= event.performance[0].displayName %></h5>
+                        <p><%= event.venue.displayName %></p>
+                            <iframe src="https://embed.spotify.com/?uri=spotify:trackset:PREFEREDTITLE:5Z7ygHQo02SUrFmcgpwsKW,1x6ACsKV4UdWS2FMuPFUiT,4bi73jCM02fMpkI11Lqmfe" frameborder="0" allowtransparency="true"></iframe>
+                    </div>
+                <% }) %>
+<iframe src="https://embed.spotify.com/?uri=spotify:track:4th1RQAelzqgY7wL53UGQt" width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
+
+            </div>
+
             </div>
         </div>
     </div>
 
 <% include partials/footer %>
+
