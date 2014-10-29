@@ -1,13 +1,4 @@
-<% include partials/header %>
-<% include partials/nav %>
-<% include partials/subnav %>
-
-<div class="container">
-  <div class="row">
-      <div class="col-md-12">
-        <div class="eventList">
-          <% listOfEvents.forEach(function(event) { %>
-            <div id="eventItem">
+<div id="eventItem">
               <div class="col-md-8 col-sm-6">
                 <h5 class="artist-name white"><%= event.performance[0].displayName %></h5>
                 <p>
@@ -34,14 +25,3 @@
               </div>
               <iframe src="https://embed.spotify.com/?uri=<%=event.uri %>" frameborder="0" allowtransparency="true"></iframe>
             </div>
-          <% }) %>
-        </div>
-          <a href="#" class="scrollToTop primary-color">Back to top</a>
-      </div>
-  </div>
-</div>
-
-
-<% include partials/footer %>
-
-

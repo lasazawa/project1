@@ -1,0 +1,51 @@
+<% include partials/header %>
+<% include partials/nav %>
+<% include partials/subnav_profile %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="nav nav-tabs" id="profile-nav" role="tablist">
+        <li class="active"><a href="#">My Upcoming Events</a></li>
+        <li><a href="#">My Past Events</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="eventList">
+        <% favShows.forEach(function(show) { %>
+          <div id="eventItem">
+            <div class="col-md-8 col-sm-6">
+              <h5 class="artist-name white"><%= show.dataValues.artist %></h5>
+              <p>
+                <div class="date-box">
+                  <div class="month">NOV</div>
+                  <div class="day">29</div>
+                </div>
+              </p>
+
+              <div class="event-details">
+                <span class="venue">
+                  <a href="#"><%= show.dataValues.venue %></a>
+                </span> at
+                <span><%= show.dataValues.time %></span>
+                <p><%= show.dataValues.location %></p>
+                <p>
+                  <button id="favorite-btn" type="submit" class="btn btn-default btn-favorite"><span class="glyphicon glyphicon-star-empty"></span></button>
+                </p>
+              </div>
+            </div>
+            <iframe src="https://embed.spotify.com/?uri=<%=show.dataValues.track_id %>" frameborder="0" allowtransparency="true"></iframe>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+
+    </div>
+  </div>
+</div>
+
+<% include partials/footer %>
