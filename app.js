@@ -119,7 +119,7 @@ app.get('/profile', function(req, res) {
     res.render("index");
   }
   var user = req.user;
-  req.user.getFavShows().done(function(err, favshows) {
+  req.user.getFavShows({include:[db.UsersFavShows]}).done(function(err, favshows) {
     if (err) {
       console.log(err);
       var errMsg = "Uh oh, something went wrong";
@@ -130,45 +130,36 @@ app.get('/profile', function(req, res) {
 });
 
 app.post('/profile/favshow', function(req, res) {
-  var userId = req.user.id,
-  artist = req.body.event.artist,
-  date = req.body.event.date,
-  venue = req.body.event.venue,
-  time = req.body.event.time,
-  location = req.body.event.location,
-  track_uri = req.body.track.uri;
-  event_id = req.body.event.id;
 
-  db.FavShow.findOrCreate({
-    where: {event_id: event_id},
-    defaults: {
-      artist: artist,
-      date: date,
-      venue: venue,
-      time: time,
-      location: location,
-      track_id: track_uri,
-      event_id: event_id
+  db.UsersFavShows.findOrCreate({
+    where:{
+      UserId: req.body.UserId,
+      FavShowId: req.body.FavShowId
+    },
+    defaults:{
+      UserId: req.body.UserId,
+      FavShowId: req.body.FavShowId,
+      isLiked: true
     }
-  }).done(function(err, favShow, created) {
-        if (err) {
-            console.log(err);
-            var errMsg = "Oops, something went wrong";
-        }
-        else {
-          // put in to join table
-          req.user.addFavShow(favShow).done(function(err, userfaveshow) {
-            if (err) {
-              console.log(err);
-              var errMsg = "Oops, something went wrong";
-            }
-            res.redirect('/home');
-          });
-        }
-    });
+  }).done(function(err,like){
+    res.redirect("/home");
+  });
 });
 
 app.get('/home', function(req, res) {
+  if(!req.user) {
+    res.render("index");
+  }
+    db.FavShow.findAll({include:[db.UsersFavShows]}).done(function(err,daysEvents){
+      res.render('home', {listOfEvents:daysEvents, user:req.user});
+    });
+  });
+
+
+
+// FOR POPULATING DB ONLY //
+
+app.get('/populate', function(req, res) {
   if(!req.user) {
     res.render("index");
   }
@@ -191,7 +182,7 @@ app.get('/home', function(req, res) {
             var allEvents = obj.resultsPage.results.event;
 
             daysEvents = _.filter(allEvents, function(event){
-                return event.start.date === "2014-10-29" && event.type === "Concert";
+                return event.start.date === "2014-10-30" && event.type === "Concert";
             });
 
             // artist name string from event list
@@ -275,9 +266,33 @@ app.get('/home', function(req, res) {
         },
         ],
         function final(err, daysEvents){
-            console.log("final call just ran!");
-            console.log(currentUser);
-            res.render("home", {listOfEvents: daysEvents, user:currentUser});
+            async.forEach(daysEvents, function(event,callback){
+              db.FavShow.findOrCreate({
+                where:{
+                  artist: event.performance[0].displayName,
+                  date: event.start.date,
+                  venue: event.venue.displayName,
+                  time: event.start.time,
+                  location: event.location.city,
+                  track_id: event.uri,
+                  event_id: event.id
+                },
+                defaults:{
+                  artist: event.performance[0].displayName,
+                  date: event.start.date,
+                  venue: event.venue.displayName,
+                  time: event.start.time,
+                  location: event.location.city,
+                  track_id: event.uri,
+                  event_id: event.id
+                }
+              }).done(function(err,event){
+              callback();
+            }, function(taco){
+              res.render("home");
+            });
+            });
+
         }
     );
     });

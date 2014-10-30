@@ -1,27 +1,27 @@
 <div id="eventItem">
-              <div class="col-md-8 col-sm-6">
-                <h5 class="artist-name white"><%= event.performance[0].displayName %></h5>
-                <p>
-                  <span class="venue">
-                    <a href="#"><%= event.venue.displayName %></a>
-                  </span> at
-                  <span><%= event.start.time %></span>
-                </p>
-                <p><%= event.location.city %></p>
+  <div class="col-md-8 col-sm-6">
+    <h5 class="artist-name white"><%= event.performance[0].displayName %></h5>
+    <p>
+      <span class="venue">
+        <a href="#"><%= event.venue.displayName %></a>
+      </span> at
+      <span><%= event.start.time %></span>
+    </p>
+    <p><%= event.location.city %></p>
 
-                <form id="favorite" action="/profile/favshow" method="POST">
-                  <input name="event[artist]" type="hidden" value="<%= event.performance[0].displayName %>">
-                  <input name="event[date]" type="hidden" value="<%= event.start.date %>">
-                  <input name="event[venue]" type="hidden" value="<%= event.venue.displayName %>">
-                  <input name="event[time]" type="hidden" value="<%= event.start.time %>">
-                  <input name="event[location]" type="hidden" value="<%= event.location.city %>">
-                  <input name="track[uri]" type="hidden" value="<%=event.uri %>">
-                  <input name="event[id]" type="hidden" value="<%=event.id %>">
-                  <p>
-                    <button id="favorite-btn" type="submit" class="btn btn-default btn-favorite"><span class="glyphicon glyphicon-star-empty"></span></button>
-                  </p>
-                </form>
+    <form id="favorite" action="/profile/favshow" method="POST">
+      <input name="event[artist]" type="hidden" value="<%= event.performance[0].displayName %>">
+      <input name="event[date]" type="hidden" value="<%= event.start.date %>">
+      <input name="event[venue]" type="hidden" value="<%= event.venue.displayName %>">
+      <input name="event[time]" type="hidden" value="<%= event.start.time %>">
+      <input name="event[location]" type="hidden" value="<%= event.location.city %>">
+      <input name="track[uri]" type="hidden" value="<%=event.uri %>">
+      <input name="event[id]" type="hidden" value="<%=event.id %>">
+      <p>
+        <button id="favorite-btn" type="submit" class="btn btn-default btn-favorite"><span class="glyphicon glyphicon-star-empty"></span></button>
+      </p>
+    </form>
 
-              </div>
-              <iframe src="https://embed.spotify.com/?uri=<%=event.uri %>" frameborder="0" allowtransparency="true"></iframe>
-            </div>
+  </div>
+  <iframe src="https://embed.spotify.com/?uri=<%=event.uri %>" frameborder="0" allowtransparency="true"></iframe>
+</div>

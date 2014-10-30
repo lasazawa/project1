@@ -11,6 +11,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         User.hasMany(models.FavShow, {through: "UsersFavShows"});
+        User.hasMany(models.UsersFavShows);
         // associations can be defined here
       }
     }

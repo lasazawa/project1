@@ -16,6 +16,10 @@ module.exports = {
         type: DataTypes.INTEGER,
         foreignKey:true
       },
+      isLiked: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE
