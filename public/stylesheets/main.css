@@ -22,7 +22,7 @@ h5 {
 
 a{
     color: #333;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 /*.wrapper{
@@ -165,7 +165,7 @@ h2.header {
     margin-top: 2px;
 }
 
-.jamtrkr:hover {
+a:hover .jamtrkr {
     text-decoration: none;
 }
 
@@ -243,36 +243,43 @@ iframe {
 }
 .btn-favorite {
     color: rgba(0,0,0,0.3);
-    border:none;
-    background-color: rgba(0,0,0,0);
-    padding:0;
+    background-color: white;
+    border:solid 1px rgba(0,0,0,0.15);
+    padding:1px 8px;
     border-radius: 3px;
-    margin: 0 0 6px;
-    font-size: 24px;
+    margin: 4px 0 12px;
+    font-size: 12px;
 }
 
 .btn-favorite:hover {
-    border:none;
-    background-color: rgba(0,0,0,0);
-    color: rgba(220,30,105,1);
+    color: rgba(0,0,0,0.5);
+    border:solid 1px rgba(0,0,0,0.25);
 }
 
+.btn-favorite:active {
+    border:solid 1px rgba(0,0,0,0.35);
+    background-color: (225,40,90,0.3);
+}
+
+/* selected version */
 .btn-favorite-selected {
-    color: red;
-    border:none;
-    background-color: rgba(0,0,0,0);
-    padding:0;
+    color: rgba(225,40,90,1);
+    background-color: white;
+    border:solid 1px rgba(225,40,90,0.15);
+    padding:1px 8px;
     border-radius: 3px;
-    margin: 0 0 6px;
-    font-size: 24px;
+    margin: 2px 0 12px;
+    font-size: 12px;
 }
 
-.btn-favorite:hover {
-    border:none;
-    background-color: rgba(0,0,0,0);
-    color: purple;
+.btn-favorite-selected:hover {
+    color: rgba(150,0,50,1);
+    border:solid 1px rgba(225,40,90,0.3);
 }
 
+.glyphicon-star {
+    margin-right: 4px;
+}
 /* END EVENT LIST */
 
 /* PROFILE */
@@ -379,6 +386,7 @@ iframe {
 iframe {
     float: left;
     margin-bottom: 20px;
+    clear: both;
 }
 
 }

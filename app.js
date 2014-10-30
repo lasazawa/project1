@@ -115,6 +115,9 @@ app.get('/', function(req, res) {
 });
 
 app.get('/profile', function(req, res) {
+  if(!req.user) {
+    res.render("index");
+  }
   var user = req.user;
   req.user.getFavShows().done(function(err, favshows) {
     if (err) {
@@ -166,6 +169,9 @@ app.post('/profile/favshow', function(req, res) {
 });
 
 app.get('/home', function(req, res) {
+  if(!req.user) {
+    res.render("index");
+  }
     var daysEvents = [];
     var artistNames = [];
     var artistIds = [];

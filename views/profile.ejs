@@ -17,33 +17,31 @@
         <% favShows.forEach(function(show) { %>
           <div id="eventItem">
             <div class="col-md-8 col-sm-6">
-              <h5 class="artist-name white"><%= show.dataValues.artist %></h5>
-              <p>
-                <div class="date-box">
-                  <div class="month">NOV</div>
-                  <div class="day">29</div>
-                </div>
-              </p>
-
-              <div class="event-details">
-                <span class="venue">
-                  <a href="#"><%= show.dataValues.venue %></a>
-                </span> at
-                <span><%= show.dataValues.time %></span>
-                <p><%= show.dataValues.location %></p>
+              <div class="test" >
+                <h5 class="artist-name white"><%= show.dataValues.artist %></h5>
                 <p>
-                  <button id="favorite-btn" type="submit" class="btn btn-default btn-favorite"><span class="glyphicon glyphicon-star-empty"></span></button>
+                  <div class="date-box" >
+                    <div class="month">NOV</div>
+                    <div class="day">29</div>
+                  </div>
                 </p>
+
+                <div class="event-details">
+                  <span class="venue">
+                    <a href="#"><%= show.dataValues.venue %></a>
+                  </span> at
+                  <span><%= show.dataValues.time %></span>
+                  <p><%= show.dataValues.location %></p>
+                  <p>
+                    <button id="favorite-btn" type="submit" class="btn-favorite-selected"><span class="glyphicon glyphicon-star"></span>Liked!</button>
+                  </p>
+                </div>
               </div>
             </div>
             <iframe src="https://embed.spotify.com/?uri=<%=show.dataValues.track_id %>" frameborder="0" allowtransparency="true"></iframe>
           </div>
         <% }) %>
       </div>
-    </div>
-
-    <div class="col-md-4">
-
     </div>
   </div>
 </div>
