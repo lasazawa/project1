@@ -66,13 +66,29 @@ a.primary-color:hover {
 
 #heading {
     padding: 10px 30px 40px;
-    margin: 0;
+    margin: 20px 0;
     border-bottom: solid 10px -webkit-linear-gradient(left, rgba(225,40,90,0.7), rgba(200,0,145,0.7)); /* For Safari 5.1 to 6.0 */
     border-bottom: -o-linear-gradient(right, rgba(225,40,90,0.7), rgba(200,0,145,0.7)); /* For Opera 11.1 to 12.0 */
     border-bottom: -moz-linear-gradient(right, rgba(225,40,90,0.7), rgba(200,0,145,0.7)); /* For Firefox 3.6 to 15 */
     border-bottom: linear-gradient(to right, rgba(225,40,90,0.7), rgba(200,0,145,0.7)); /* Standard syntax */
-    background-color: rgba(0,0,0,0.6);
-    border-radius: 0 0 3px 3px;
+    background-color: rgba(0,0,0,0.8);
+    border-radius: 3px;
+}
+
+.stripe {
+    background: solid 10px -webkit-linear-gradient(left, rgba(225,40,90,0.7), rgba(200,0,145,0.7)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, rgba(225,40,90,0.7), rgba(200,0,145,0.7)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, rgba(225,40,90,0.7), rgba(200,0,145,0.7)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, rgba(225,40,90,0.7), rgba(200,0,145,0.7)); /* Standard syntax */
+}
+.height20 {
+    height: 20px;
+}
+.height35 {
+    height: 35px;
+}
+.height60 {
+    height: 60px;
 }
 
 #heading h1 {
@@ -221,6 +237,14 @@ a:hover .jamtrkr {
 
 /* INDEX */
 
+.images {
+    overflow: hidden;
+    height: 130px;
+    opacity: 0.9;
+    border-radius: 5px;
+    padding: 5px;
+}
+
 .images.col-md-2, .images.col-sm-3, .images.col-xs-4 {
     margin:0;
     margin:0;
@@ -230,10 +254,18 @@ a:hover .jamtrkr {
 
 .photo {
     width: 100%;
+    opacity: 0.85;
     /*background-image: url(/images/test.jpg) ;*/
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
-
+.pink-bg {
+    /*background: -webkit-linear-gradient(left, rgba(225,40,90,1), rgba(200,0,145,1)); /* For Safari 5.1 to 6.0 */
+    /*background: -o-linear-gradient(right, rgba(225,40,90,1), rgba(200,0,145,1)); /* For Opera 11.1 to 12.0 */
+    /*background: -moz-linear-gradient(right, rgba(225,40,90,1), rgba(200,0,145,1)); /* For Firefox 3.6 to 15 */
+   /* background: linear-gradient(to right, rgba(225,40,90,1), rgba(200,0,145,1)); /* Standard syntax */
+    background-color: rgba(0,0,0,1);
+    background-image: url(/images/lights13.jpg) ;
+}
 .btn-signin {
     font-size: 16px;
     background-color: rgba(130,185,0,1);
@@ -443,6 +475,7 @@ iframe {
     text-align: center;
     margin:15px auto 0;
     display: block;
+    height: 60px;
 }
 
 @media (max-width: 767px) {
@@ -452,7 +485,7 @@ iframe {
     padding-right: 0;
 }
 
-.logo, .subnav .primary-color-dark, .datePicker, .header, .locationPicker, #profile-nav {
+.logo, .subnav .primary-color-dark, .datePicker, .header, .locationPicker, #profile-nav, .no-shows {
     margin-left: 10px;
 }
 
