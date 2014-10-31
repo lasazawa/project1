@@ -8,7 +8,8 @@ module.exports = function(sequelize, DataTypes) {
     time: DataTypes.STRING,
     location: DataTypes.STRING,
     track_id: DataTypes.STRING,
-    event_id: DataTypes.STRING
+    event_id: DataTypes.STRING,
+    artist_img: DataTypes.STRING,
   }, {
     classMethods: {
       associate: function(models) {

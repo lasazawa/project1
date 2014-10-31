@@ -28,6 +28,20 @@ var spotifyApi = new SpotifyWebApi({
   redirectUri : 'http://localhost:3000/auth/spotify/callback'
 });
 
+
+// helper functions
+
+function formatTime (t) {
+  var h = parseInt(t.substring(0, 2));
+  var ap = 'am';
+  (h === 0 ? h = 12 : h = h);
+  if (h > 12) {
+    h -=12;
+    ap = 'pm';
+  }
+  return h + t.substring(2,5) + ap;
+}
+
 // ------------
 
 app.use(cookieSession( {
@@ -118,14 +132,25 @@ app.get('/profile', function(req, res) {
   if(!req.user) {
     res.render("index");
   }
-  var user = req.user;
+
   req.user.getFavShows({include:[db.UsersFavShows]}).done(function(err, favshows) {
     if (err) {
       console.log(err);
       var errMsg = "Uh oh, something went wrong";
     }
-    res.render('profile', {favShows:favshows, user:user});
-    console.log("favshows:", favshows);
+
+    favshows.forEach(function(show) {
+      var dates = show.dataValues.date;
+      dates = new Date();
+      show.month = (dateFormat(dates, "mmm"));
+      show.day = (dateFormat(dates, "dd"));
+      show.time = formatTime(show.dataValues.time);
+
+    });
+  console.log(favshows);
+  console.log(favshows.length);
+  res.render('profile', {favShows:favshows, user:req.user});
+
   });
 });
 
@@ -146,16 +171,55 @@ app.post('/profile/favshow', function(req, res) {
   });
 });
 
+app.delete('/profile/delete', function(req, res) {
+  var favShow = req.body.FavShowId,
+  userId = req.user.dataValues.id;
+  db.UsersFavShows.find({where:
+    {FavShowId: favShow,
+    UserId: userId}
+  }).done(function(err, joinInstance) {
+    joinInstance.destroy().done(function(err) {
+      res.redirect('/profile');
+    });
+  });
+});
+
+
 app.get('/home', function(req, res) {
   if(!req.user) {
     res.render("index");
   }
-    db.FavShow.findAll({include:[db.UsersFavShows]}).done(function(err,daysEvents){
+    db.FavShow.findAll({
+      where: {
+        date: "2014-10-31"
+      },
+      include:[db.UsersFavShows]}).done(function(err,daysEvents){
+
+      console.log(daysEvents);
+      daysEvents.forEach(function(event) {
+        if (event.time !== null) {
+          event.time = formatTime(event.dataValues.time);
+        }
+      });
+
       res.render('home', {listOfEvents:daysEvents, user:req.user});
     });
   });
 
-
+app.delete('/home/delete', function(req, res) {
+  var favShow = req.body.FavShowId,
+  userId = req.body.UserId;
+  console.log(favShow);
+  console.log(userId);
+  db.UsersFavShows.find({where:
+    {FavShowId: favShow,
+    UserId: userId}
+  }).done(function(err, joinInstance) {
+    joinInstance.destroy().done(function(err) {
+      res.redirect('/home');
+    });
+  });
+});
 
 // FOR POPULATING DB ONLY //
 
@@ -166,10 +230,12 @@ app.get('/populate', function(req, res) {
     var daysEvents = [];
     var artistNames = [];
     var artistIds = [];
+    var artistImages = [];
     var topTracks = [];
     var track = {};
     var finalTracks = [];
-    var allEvents = "http://api.songkick.com/api/3.0/metro_areas/26330-us-sf-bay-area/calendar.json?apikey=" + songkickKey;
+    var allEvents = "http://api.songkick.com/api/3.0/metro_areas/26330-us-sf-bay-area/calendar.json?apikey=" + songkickKey + "&page=8";
+
 
     async.waterfall([
     function firstCall(callback){
@@ -180,18 +246,26 @@ app.get('/populate', function(req, res) {
             var obj = JSON.parse(body);
 
             var allEvents = obj.resultsPage.results.event;
+            // console.log(allEvents)
 
             daysEvents = _.filter(allEvents, function(event){
-                return event.start.date === "2014-10-30" && event.type === "Concert";
+                return event.start.date === "2014-10-31" && event.type === "Concert";
             });
 
             // artist name string from event list
-            var artistString = (daysEvents[0].performance[0].displayName);
+            // console.log(allEvents.length);
+            // console.log(daysEvents.length);
+            if(typeof obj.resultsPage.results.performance !== 'undefined'){
+              var artistString = (daysEvents[0].performance[0].displayName);
+            }
 
             // get all artist name strings for days events
             daysEvents.forEach(function(event) {
+              if(typeof event.performance !== 'undefined'){
                 artistNames.push(event.performance[0].displayName);
+              }
             });
+
         }
             // this is the callback for async.waterfall (first parameter is if there is an error)
             // console.log(daysEvents)
@@ -208,15 +282,13 @@ app.get('/populate', function(req, res) {
                     var obj2 = JSON.parse(body);
                     // make sure this is not undefined
                     if (typeof obj2.artists.items[0] !== 'undefined'){
-                        console.log(typeof obj2.artists.items[0].id);
+                        // console.log(typeof obj2.artists.items[0].id);
                         artistIds.push(obj2.artists.items[0].id);
                         callback();
                     }
                     else {
                      callback();
                     }
-
-
 
                     }
                 });
@@ -239,16 +311,17 @@ app.get('/populate', function(req, res) {
               var artistTopTracks = "https://api.spotify.com/v1/artists/" + id + "/top-tracks?country=US";
                 request(artistTopTracks, function(error, response, body) {
                     if (!error && response.statusCode == 200) {
-                        var result = JSON.parse(body);
-                        for (var i = 0; i < daysEvents.length; i++) {
-                        if (daysEvents[i].performance[0].displayName === result.tracks[0].artists[0].name) {
-                            daysEvents[i].uri = result.tracks[0].uri;
-                            count++;
+                      var result = JSON.parse(body);
+                      for (var i = 0; i < daysEvents.length; i++) {
+                      console.log(result);
+                        if(typeof result.tracks[0] != 'undefined') {
+                          if (daysEvents[i].performance[0].displayName === result.tracks[0].artists[0].name) {
+                              daysEvents[i].uri = result.tracks[0].uri;
+                              count++;
+                          }
                         }
-
-                        }
-
-                        callback();
+                      }
+                      callback();
                     }
                 });
             },
@@ -264,18 +337,50 @@ app.get('/populate', function(req, res) {
             }
             });
         },
+
+        // function fourthCall(artistImages, daysEvents, topTracks,artistNames, callback) {
+        //   console.log("fourth call just ran");
+        //   async.each(artistImages, function(id, callback) {
+        //     var artistId = "https://api.spotify.com/v1/artists/" + id;
+        //     request(artistImages, function(error, response, body) {
+        //       if (!error && response.statusCode == 200) {
+        //         var result = JSON.parse(body);
+        //         if (typeof result.images[1].url !== 'undefined') {
+        //           artistImages.push(result.images[1].url);
+        //           console.log(artistImages);
+        //           callback();
+        //         }
+        //         else{
+        //           callback();
+        //         }
+        //       }
+        //     });
+        //   },
+        //   function(err) {
+        //     if(err) {
+        //       console.log("oops something went wrong");
+        //     }
+        //     else {
+        //       callback(null, artistImages, daysEvents, topTracks, artistNames);
+        //     }
+        //   });
+        // },
+
         ],
+
+
+
         function final(err, daysEvents){
             async.forEach(daysEvents, function(event,callback){
               db.FavShow.findOrCreate({
                 where:{
                   artist: event.performance[0].displayName,
-                  date: event.start.date,
-                  venue: event.venue.displayName,
-                  time: event.start.time,
-                  location: event.location.city,
-                  track_id: event.uri,
-                  event_id: event.id
+                  date: event.start.date
+                  // venue: event.venue.displayName,
+                  // time: event.start.time,
+                  // location: event.location.city,
+                  // track_id: event.uri,
+                  // event_id: event.id,
                 },
                 defaults:{
                   artist: event.performance[0].displayName,
@@ -284,7 +389,8 @@ app.get('/populate', function(req, res) {
                   time: event.start.time,
                   location: event.location.city,
                   track_id: event.uri,
-                  event_id: event.id
+                  event_id: event.id,
+                  artist_img: event.image
                 }
               }).done(function(err,event){
               callback();

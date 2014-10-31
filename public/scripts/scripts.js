@@ -28,9 +28,12 @@ $(document).ready(function(){
   };
 
   stickyNav();
-
   $(window).scroll(function() {
       stickyNav();
+  });
+
+  $(function() {
+    $( "#datepicker" ).datepicker();
   });
 
 });
