@@ -123,11 +123,18 @@ app.get('/auth/spotify/callback',
     res.redirect('/home');
   });
 
-// Home
+// Index
 app.get('/', function(req, res) {
-    res.render('index');
+  db.FavShow.findAll({
+      where: {date: "2014-10-31"}
+      }).done(function(err, daysEvents) {
+        console.log(daysEvents.length);
+        res.render('index', {listOfEvents:daysEvents});
+      });
 });
 
+
+// Profile
 app.get('/profile', function(req, res) {
   if(!req.user) {
     res.render("index");
@@ -199,6 +206,9 @@ app.get('/home', function(req, res) {
       daysEvents.forEach(function(event) {
         if (event.time !== null) {
           event.time = formatTime(event.dataValues.time);
+        }
+        if (event.track_id.length > 60) {
+          console.log("NO TRACK FOUND");
         }
       });
 

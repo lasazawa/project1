@@ -11,14 +11,20 @@
                     <div id="login">
                       <a href="/auth/spotify" class="btn btn-signin white">Log in with Spotify</a>
                     </div>
+                    <div>
+                      <p class="date on-deck">On deck tonight</p>
+                        <% listOfEvents.forEach(function(event) { %>
+                        <div class="artists-tonight"><%= event.artist %> </div>
+                      <% }) %>
+                    </div>
                 </div>
             </div>
             <div class="stripe height30 col-sm-5 col-xs-3"></div>
             <div class="stripe height20 col-md-6 col-sm-9 col-xs-4"></div>
-
           </div>
-        </div>
+      </div>
     </div>
+
     <div class="row pink-bg" >
         <div class="images col-md-2 col-sm-3 col-xs-4 "><img class="photo" src="/images/artist1.jpg" alt=""></div>
         <div class="images col-md-2 col-sm-3 col-xs-4 "><img class="photo" src="/images/artist2.jpg" alt=""></div>
