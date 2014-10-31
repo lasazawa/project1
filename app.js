@@ -25,7 +25,7 @@ var SpotifyWebApi = require('spotify-web-api-node');
 var spotifyApi = new SpotifyWebApi({
   clientId : process.env.SPOT_ID,
   clientSecret : process.env.SPOT_SECRET,
-  redirectUri : 'http://localhost:3000/auth/spotify/callback'
+  redirectUri: process.env.SPOT_CALLBACK
 });
 
 
