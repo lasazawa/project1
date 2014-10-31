@@ -77,7 +77,7 @@ console.log("***********************" ,currentUser);
 passport.use(new SpotifyStrategy({
     clientID: process.env.SPOT_ID,
     clientSecret: process.env.SPOT_SECRET,
-    callbackURL: "http://localhost:3000/auth/spotify/callback"
+    callbackURL: process.env.SPOT_CALLBACK
   },
   function(accessToken, refreshToken, profile, done) {
 
