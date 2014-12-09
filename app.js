@@ -191,14 +191,14 @@ app.delete('/profile/delete', function(req, res) {
   });
 });
 
-
+//HOME PAGE
 app.get('/home', function(req, res) {
   if(!req.user) {
     res.render("index");
   }
     db.FavShow.findAll({
       where: {
-        date: "2014-10-31"
+        date: "2014-12-10"
       },
       include:[db.UsersFavShows]}).done(function(err,daysEvents){
 
@@ -244,7 +244,7 @@ app.get('/populate', function(req, res) {
     var topTracks = [];
     var track = {};
     var finalTracks = [];
-    var allEvents = "http://api.songkick.com/api/3.0/metro_areas/26330-us-sf-bay-area/calendar.json?apikey=" + songkickKey + "&page=8";
+    var allEvents = "http://api.songkick.com/api/3.0/metro_areas/26330-us-sf-bay-area/calendar.json?apikey=" + songkickKey + "&page=2";
 
 
     async.waterfall([
@@ -256,14 +256,14 @@ app.get('/populate', function(req, res) {
             var obj = JSON.parse(body);
 
             var allEvents = obj.resultsPage.results.event;
-            // console.log(allEvents)
+            // console.log(allEvents);
 
             daysEvents = _.filter(allEvents, function(event){
-                return event.start.date === "2014-10-31" && event.type === "Concert";
+                return event.start.date === "2014-12-10" && event.type === "Concert";
             });
 
             // artist name string from event list
-            // console.log(allEvents.length);
+            console.log(allEvents.length);
             // console.log(daysEvents.length);
             if(typeof obj.resultsPage.results.performance !== 'undefined'){
               var artistString = (daysEvents[0].performance[0].displayName);
@@ -294,6 +294,7 @@ app.get('/populate', function(req, res) {
                     if (typeof obj2.artists.items[0] !== 'undefined'){
                         // console.log(typeof obj2.artists.items[0].id);
                         artistIds.push(obj2.artists.items[0].id);
+                        console.log(artistIds);
                         callback();
                     }
                     else {
@@ -323,7 +324,7 @@ app.get('/populate', function(req, res) {
                     if (!error && response.statusCode == 200) {
                       var result = JSON.parse(body);
                       for (var i = 0; i < daysEvents.length; i++) {
-                      console.log(result);
+                      // console.log(result);
                         if(typeof result.tracks[0] != 'undefined') {
                           if (daysEvents[i].performance[0].displayName === result.tracks[0].artists[0].name) {
                               daysEvents[i].uri = result.tracks[0].uri;
@@ -348,7 +349,7 @@ app.get('/populate', function(req, res) {
             });
         },
 
-        // function fourthCall(artistImages, daysEvents, topTracks,artistNames, callback) {
+        // function fourthCall(artistImages, daysEvents, topTracks, artistNames, callback) {
         //   console.log("fourth call just ran");
         //   async.each(artistImages, function(id, callback) {
         //     var artistId = "https://api.spotify.com/v1/artists/" + id;
@@ -360,9 +361,9 @@ app.get('/populate', function(req, res) {
         //           console.log(artistImages);
         //           callback();
         //         }
-        //         else{
-        //           callback();
-        //         }
+                // else{
+                //   callback();
+                // }
         //       }
         //     });
         //   },
@@ -381,6 +382,7 @@ app.get('/populate', function(req, res) {
 
 
         function final(err, daysEvents){
+            console.log("final call ran");
             async.forEach(daysEvents, function(event,callback){
               db.FavShow.findOrCreate({
                 where:{
@@ -400,9 +402,10 @@ app.get('/populate', function(req, res) {
                   location: event.location.city,
                   track_id: event.uri,
                   event_id: event.id,
-                  artist_img: event.image
+                  // artist_img: event.image
                 }
               }).done(function(err,event){
+                console.log("created");
               callback();
             }, function(taco){
               res.render("home");

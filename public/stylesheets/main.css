@@ -66,13 +66,19 @@ a.primary-color:hover {
 
 #heading {
     padding: 10px 30px 40px;
-    margin: 20px 0;
+    margin: 20px 0 0;
     border-bottom: solid 10px -webkit-linear-gradient(left, rgba(225,40,90,0.7), rgba(200,0,145,0.7)); /* For Safari 5.1 to 6.0 */
     border-bottom: -o-linear-gradient(right, rgba(225,40,90,0.7), rgba(200,0,145,0.7)); /* For Opera 11.1 to 12.0 */
     border-bottom: -moz-linear-gradient(right, rgba(225,40,90,0.7), rgba(200,0,145,0.7)); /* For Firefox 3.6 to 15 */
     border-bottom: linear-gradient(to right, rgba(225,40,90,0.7), rgba(200,0,145,0.7)); /* Standard syntax */
     background-color: rgba(0,0,0,0.75);
     border-radius: 3px;
+}
+
+.sub-heading {
+    padding: 10px 30px 40px;
+    margin: 0 0;
+    background-color: rgba(0,0,0,0.5);
 }
 
 .stripe {
@@ -179,6 +185,42 @@ a.primary-color:hover {
     margin-right: 6px;
 }
 
+.subnav span#dateSelector #datepicker{
+    color: white;
+    border: none;
+    background-color: rgba(185,10,90,0.4);
+    padding: 6px 12px;
+    display: inline-block;
+    border-radius: 3px;
+    margin-top: 2px;
+}
+
+#datepicker:hover {
+    cursor: pointer;
+}
+
+.subnav span#dateSelector {
+    margin-right:50px;
+}
+
+input#datepicker[type="data-autosize-input"] {
+  width: 90px;
+  min-width: 90px;
+  max-width: 300px;
+  transition: width 0.25s;
+}
+
+#dateSelector p {
+    display:inline;
+}
+
+input#datepicker { outline: none; }
+
+:focus {
+  outline-color: transparent;
+  outline-style: none;
+}
+
 .subnav-date {
     padding: 0 0 16px;
 }
@@ -194,7 +236,7 @@ a.primary-color:hover {
     border-radius: 3px;
     margin-top: 2px;
 }
-.datePicker:hover, .locationPicker:hover {
+input#datepicker :hover, .datePicker:hover, .locationPicker:hover {
     background-color: rgba(185,10,90,1);
     text-decoration: none;
 }
