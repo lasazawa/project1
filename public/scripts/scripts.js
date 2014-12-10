@@ -23,16 +23,20 @@ $(document).ready(function(){
         console.log(showDate);
         $(this).val(showDate);
         $(this).attr('size', $(this).val().length+6);
+
+        $.ajax({
+          type: "POST",
+          url: "/home/date",
+          data: {date: selectedDate}
+        }).done(function(response) {
+          console.log("THIS IS THE RESPONSE: " + response);
+          $('.eventList').html(response);
+        });
+
       }
     });
 
-  // get list of events based on date selected
-  // $.ajax({
-  //   url: "test.html",
-  //   context: document.body
-  // }).done(function() {
-  //   $( this ).addClass( "done" );
-  // });
+  // get list of events based on date selecte
 
 
   //Check to see if the window is top if not then display button

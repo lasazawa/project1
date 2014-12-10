@@ -191,6 +191,7 @@ app.delete('/profile/delete', function(req, res) {
   });
 });
 
+// var today = dateFormat(now, "yyyy-mm-dd");
 //HOME PAGE
 app.get('/home', function(req, res) {
   if(!req.user) {
@@ -198,7 +199,7 @@ app.get('/home', function(req, res) {
   }
     db.FavShow.findAll({
       where: {
-        date: "2014-12-10"
+        date: "2014-12-09"
       },
       include:[db.UsersFavShows]}).done(function(err,daysEvents){
 
@@ -215,6 +216,30 @@ app.get('/home', function(req, res) {
       res.render('home', {listOfEvents:daysEvents, user:req.user});
     });
   });
+
+app.post('/home/date', function(req, res) {
+  // console.log("MADE IT TO APPJS" + req.body.date);
+  var theDate = req.body.date;
+  db.FavShow.findAll({
+    where: {
+      date: theDate
+    },
+    include:[db.UsersFavShows]}).done(function(err, daysEvents) {
+      console.log("HELLO");
+      daysEvents.forEach(function(event) {
+        // maybe order the list here so songs without tracks are last
+        if (event.time !== null) {
+          event.time = formatTime(event.dataValues.time);
+        }
+        if (event.track_id.length > 60) {
+          console.log("NO TRACK FOUND");
+        }
+      });
+      console.log(daysEvents);
+      res.render('partials/eventItem', {listOfEvents:daysEvents, user:req.user});
+    });
+
+});
 
 app.delete('/home/delete', function(req, res) {
   var favShow = req.body.FavShowId,
@@ -244,8 +269,8 @@ app.get('/populate', function(req, res) {
     var topTracks = [];
     var track = {};
     var finalTracks = [];
-    var allEvents = "http://api.songkick.com/api/3.0/metro_areas/26330-us-sf-bay-area/calendar.json?apikey=" + songkickKey + "&page=2";
-
+    var allEvents = "http://api.songkick.com/api/3.0/metro_areas/26330-us-sf-bay-area/calendar.json?apikey=" + songkickKey + "&page=3";
+    var count;
 
     async.waterfall([
     function firstCall(callback){
@@ -259,7 +284,8 @@ app.get('/populate', function(req, res) {
             // console.log(allEvents);
 
             daysEvents = _.filter(allEvents, function(event){
-                return event.start.date === "2014-12-10" && event.type === "Concert";
+                // return event.start.date === "2014-12-11" && event.type === "Concert";
+                return event.type === "Concert";
             });
 
             // artist name string from event list
@@ -271,8 +297,11 @@ app.get('/populate', function(req, res) {
 
             // get all artist name strings for days events
             daysEvents.forEach(function(event) {
+              // console.log(event.performance[0]);
               if(typeof event.performance !== 'undefined'){
-                artistNames.push(event.performance[0].displayName);
+                if(typeof event.performance[0] !== 'undefined'){
+                  artistNames.push(event.performance[0].displayName);
+                }
               }
             });
 
@@ -284,6 +313,7 @@ app.get('/populate', function(req, res) {
 
         },
         function secondCall(artistNames, callback){
+          count = 0;
             console.log("second call just ran");
             async.each(artistNames, function(name,callback){
             var artistObject = "https://api.spotify.com/v1/search?q=" + name + "&type=artist";
@@ -295,9 +325,11 @@ app.get('/populate', function(req, res) {
                         // console.log(typeof obj2.artists.items[0].id);
                         artistIds.push(obj2.artists.items[0].id);
                         console.log(artistIds);
+                        count++;
                         callback();
                     }
                     else {
+                      console.log("HELLOOOOOOO DID NOT RUN");
                      callback();
                     }
 
@@ -309,6 +341,7 @@ app.get('/populate', function(req, res) {
                 console.log("Oops! Something went wrong", err);
             }
             else{
+                console.log(count);
                 // this is the callback for async.waterfall (first parameter is if there is an error)
                 callback(null, artistIds, artistNames);
             }
@@ -316,7 +349,7 @@ app.get('/populate', function(req, res) {
     },
     // we are still missing 5.....
         function thirdCall(artistIds, artistNames, callback){
-            var count = 0;
+            count = 0;
             console.log("third call just ran");
             async.each(artistIds,function(id,callback){
               var artistTopTracks = "https://api.spotify.com/v1/artists/" + id + "/top-tracks?country=US";
@@ -326,9 +359,11 @@ app.get('/populate', function(req, res) {
                       for (var i = 0; i < daysEvents.length; i++) {
                       // console.log(result);
                         if(typeof result.tracks[0] != 'undefined') {
-                          if (daysEvents[i].performance[0].displayName === result.tracks[0].artists[0].name) {
-                              daysEvents[i].uri = result.tracks[0].uri;
-                              count++;
+                          if(typeof daysEvents[i].performance[0] != 'undefined') {
+                            if (daysEvents[i].performance[0].displayName === result.tracks[0].artists[0].name) {
+                                daysEvents[i].uri = result.tracks[0].uri;
+                                count++;
+                            }
                           }
                         }
                       }

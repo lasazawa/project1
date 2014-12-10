@@ -199,9 +199,6 @@ a.primary-color:hover {
     cursor: pointer;
 }
 
-.subnav span#dateSelector {
-    margin-right:50px;
-}
 
 input#datepicker[type="data-autosize-input"] {
   width: 90px;
