@@ -8,11 +8,13 @@ var express = require('express'),
     dateFormat = require('dateformat'),
     db = require("./models/index"),
     _ = require('underscore');
+    partial = require('express-partial');
 var cookieSession = require('cookie-session');
 var passport = require('passport');
 var SpotifyStrategy = require('passport-spotify').Strategy;
 
 app.set('view engine', 'ejs');
+app.use(partial());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride('_method'));
@@ -41,6 +43,9 @@ function formatTime (t) {
   }
   return h + t.substring(2,5) + ap;
 }
+
+var now = new Date();
+var today = dateFormat(now, "yyyy-mm-dd");
 
 // ------------
 
@@ -120,17 +125,22 @@ app.get('/auth/spotify',
 app.get('/auth/spotify/callback',
   passport.authenticate('spotify', { failureRedirect: '/login' }),
   function(req, res) {
+    console.log("WHAT????")
     res.redirect('/home');
   });
 
 // Index
 app.get('/', function(req, res) {
   db.FavShow.findAll({
-      where: {date: "2014-10-31"}
-      }).done(function(err, daysEvents) {
-        console.log(daysEvents.length);
-        res.render('index', {listOfEvents:daysEvents});
-      });
+    where: {
+      // date: "2014-12-11"
+      date: today
+    }
+    }).done(function(err, allConcerts) {
+      console.log(err);
+      console.log(allConcerts.length);
+      res.render('index', {listOfEvents: allConcerts});
+    });
 });
 
 
@@ -191,58 +201,84 @@ app.delete('/profile/delete', function(req, res) {
   });
 });
 
-var now = new Date();
-var today = dateFormat(now, "yyyy-mm-dd");
 // var today = dateFormat(now, "yyyy-mm-dd");
 //HOME PAGE
 app.get('/home', function(req, res) {
   if(!req.user) {
     res.render("index");
   }
+
+  var eventsWithTrack = [];
+  var eventsWithoutTrack = [];
+
     db.FavShow.findAll({
       where: {
-        // date: "2014-12-09"
         date: today
       },
-      include:[db.UsersFavShows]}).done(function(err,daysEvents){
+      include:[db.UsersFavShows]}).done(function(err,daysConcerts){
 
-      console.log(daysEvents);
-      daysEvents.forEach(function(event) {
+      console.log(daysConcerts);
+      daysConcerts.forEach(function(event) {
         if (event.time !== null) {
           event.time = formatTime(event.dataValues.time);
         }
-        if (event.track_id.length > 60) {
-          console.log("NO TRACK FOUND");
+        if (event.track_id.length < 60) {
+          console.log("with track: " + (event.artist));
+          eventsWithTrack.push(event);
+          }
+        else {
+          eventsWithoutTrack.push(event);
         }
       });
-
-      res.render('home', {listOfEvents:daysEvents, user:req.user});
+      var sortedDaysEvents = eventsWithTrack.concat(eventsWithoutTrack);
+      res.render('home', {listOfEvents:sortedDaysEvents, user:req.user});
     });
   });
 
 app.post('/home/date', function(req, res) {
   // console.log("MADE IT TO APPJS" + req.body.date);
   var theDate = req.body.date;
+  var sortedDaysEvents = [];
+  var eventsWithTrack = [];
+  var eventsWithoutTrack = [];
+
   db.FavShow.findAll({
     where: {
       date: theDate
     },
-    include:[db.UsersFavShows]}).done(function(err, daysEvents) {
-      console.log("HELLO");
-      daysEvents.forEach(function(event) {
+    include:[db.UsersFavShows]}).done(function(err, allConcerts) {
+      allConcerts.forEach(function(event, index) {
         // maybe order the list here so songs without tracks are last
         if (event.time !== null) {
           event.time = formatTime(event.dataValues.time);
+          if (event.track_id.length < 60) {
+          console.log("with track: " + (event.artist));
+          eventsWithTrack.push(event);
+          }
+          else {
+            eventsWithoutTrack.push(event);
+          }
         }
-        if (event.track_id.length > 60) {
-          console.log("NO TRACK FOUND");
-        }
-      });
-      console.log(daysEvents);
-      res.render('partials/eventItem', {listOfEvents:daysEvents, user:req.user});
-    });
 
+      });
+      // console.log(allConcerts);
+      var sortedDaysEvents = eventsWithTrack.concat(eventsWithoutTrack);
+      res.render('home_main', {listOfEvents:sortedDaysEvents, user:req.user});
+    });
 });
+
+
+
+app.get('/partials', function () {
+  res.renderPartials({
+    hello: { data: 'for hello template' },
+    world: { data: 'for world template' }
+  });
+});
+
+
+
+
 
 app.delete('/home/delete', function(req, res) {
   var favShow = req.body.FavShowId,
@@ -265,7 +301,7 @@ app.get('/populate', function(req, res) {
   if(!req.user) {
     res.render("index");
   }
-    var daysEvents = [];
+    var allConcerts = [];
     var artistNames = [];
     var artistIds = [];
     var artistImages = [];
@@ -286,20 +322,20 @@ app.get('/populate', function(req, res) {
             var allEvents = obj.resultsPage.results.event;
             // console.log(allEvents);
 
-            daysEvents = _.filter(allEvents, function(event){
+            allConcerts = _.filter(allEvents, function(event){
                 // return event.start.date === "2014-12-11" && event.type === "Concert";
                 return event.type === "Concert";
             });
 
             // artist name string from event list
             console.log(allEvents.length);
-            // console.log(daysEvents.length);
+            // console.log(allConcerts.length);
             if(typeof obj.resultsPage.results.performance !== 'undefined'){
-              var artistString = (daysEvents[0].performance[0].displayName);
+              var artistString = (allConcerts[0].performance[0].displayName);
             }
 
             // get all artist name strings for days events
-            daysEvents.forEach(function(event) {
+            allConcerts.forEach(function(event) {
               // console.log(event.performance[0]);
               if(typeof event.performance !== 'undefined'){
                 if(typeof event.performance[0] !== 'undefined'){
@@ -310,7 +346,7 @@ app.get('/populate', function(req, res) {
 
         }
             // this is the callback for async.waterfall (first parameter is if there is an error)
-            // console.log(daysEvents)
+            // console.log(allConcerts)
             callback(null,artistNames);
             });
 
@@ -359,12 +395,15 @@ app.get('/populate', function(req, res) {
                 request(artistTopTracks, function(error, response, body) {
                     if (!error && response.statusCode == 200) {
                       var result = JSON.parse(body);
-                      for (var i = 0; i < daysEvents.length; i++) {
+                      for (var i = 0; i < allConcerts.length; i++) {
                       // console.log(result);
                         if(typeof result.tracks[0] != 'undefined') {
-                          if(typeof daysEvents[i].performance[0] != 'undefined') {
-                            if (daysEvents[i].performance[0].displayName === result.tracks[0].artists[0].name) {
-                                daysEvents[i].uri = result.tracks[0].uri;
+                          if(typeof allConcerts[i].performance[0] != 'undefined') {
+
+  // added lowercase to better compare strings  (allConcerts[i].uri equals the songkick object), (result.tracks[0].uri is spotify)
+  // what if there's a missing The  in front
+                            if ((allConcerts[i].performance[0].displayName.toLowerCase()) === (result.tracks[0].artists[0].name.toLowerCase())) {
+                                allConcerts[i].uri = result.tracks[0].uri;
                                 count++;
                             }
                           }
@@ -382,12 +421,12 @@ app.get('/populate', function(req, res) {
                 // this is 18....it should be higher :(
                 console.log(count);
               // this is the callback for async.waterfall (first parameter is if there is an error)
-                callback(null, daysEvents, topTracks, artistNames);
+                callback(null, allConcerts, topTracks, artistNames);
             }
             });
         },
 
-        // function fourthCall(artistImages, daysEvents, topTracks, artistNames, callback) {
+        // function fourthCall(artistImages, allConcerts, topTracks, artistNames, callback) {
         //   console.log("fourth call just ran");
         //   async.each(artistImages, function(id, callback) {
         //     var artistId = "https://api.spotify.com/v1/artists/" + id;
@@ -410,7 +449,7 @@ app.get('/populate', function(req, res) {
         //       console.log("oops something went wrong");
         //     }
         //     else {
-        //       callback(null, artistImages, daysEvents, topTracks, artistNames);
+        //       callback(null, artistImages, allConcerts, topTracks, artistNames);
         //     }
         //   });
         // },
@@ -419,9 +458,9 @@ app.get('/populate', function(req, res) {
 
 
 
-        function final(err, daysEvents){
+        function final(err, allConcerts){
             console.log("final call ran");
-            async.forEach(daysEvents, function(event,callback){
+            async.forEach(allConcerts, function(event,callback){
               db.FavShow.findOrCreate({
                 where:{
                   artist: event.performance[0].displayName,

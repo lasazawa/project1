@@ -12,6 +12,13 @@ $(document).ready(function(){
   defaultDate();
 
 
+  // $(".date").on("click",function(event){
+  //   $("#datepicker").datepicker.show();
+  // });
+ // $(function() {
+ //    $( "#datepicker" ).datepicker();
+ //  });
+
   // datepicker
   $("#datepicker").datepicker( {
       onSelect: function() {
@@ -23,6 +30,7 @@ $(document).ready(function(){
         console.log(showDate);
         $(this).val(showDate);
         $(this).attr('size', $(this).val().length+6);
+        var _this = $(this);
 
         $.ajax({
           type: "POST",
@@ -30,9 +38,17 @@ $(document).ready(function(){
           data: {date: selectedDate}
         }).done(function(response) {
           console.log("THIS IS THE RESPONSE: " + response);
-          $('#eventList').val(response);
-        });
+          $('#home-main').html(response);
+          console.log(_this);
+          console.log(showDate);
+          $('#datepicker').val(showDate);
+          $('#datepicker').attr('size', $('#datepicker').val().length+5);
+          $('#datepicker').addClass("hasDatepicker");
 
+
+          // STILL NEED TO UPDATE NUMBER OF EVENTS
+          // IF ARTIST NAME IS ALL CAPS ITS NOT FINDING SPOTIFY NAME
+        });
       }
     });
 
@@ -69,10 +85,6 @@ $(document).ready(function(){
   stickyNav();
   $(window).scroll(function() {
       stickyNav();
-  });
-
-  $(function() {
-    $( "#datepicker" ).datepicker();
   });
 
 });

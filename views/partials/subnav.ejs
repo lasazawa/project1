@@ -2,7 +2,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="header">Check out <%= listOfEvents.length %> shows happening</h2>
+                <h2 class="header">Check out
+                  <span id="num-of-events"> <% include ./num_events %> </span>
+                  shows happening
+
+                </h2>
             </div>
         </div>
     </div>
