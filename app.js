@@ -191,6 +191,8 @@ app.delete('/profile/delete', function(req, res) {
   });
 });
 
+var now = new Date();
+var today = dateFormat(now, "yyyy-mm-dd");
 // var today = dateFormat(now, "yyyy-mm-dd");
 //HOME PAGE
 app.get('/home', function(req, res) {
@@ -199,7 +201,8 @@ app.get('/home', function(req, res) {
   }
     db.FavShow.findAll({
       where: {
-        date: "2014-12-09"
+        // date: "2014-12-09"
+        date: today
       },
       include:[db.UsersFavShows]}).done(function(err,daysEvents){
 

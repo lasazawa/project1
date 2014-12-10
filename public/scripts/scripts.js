@@ -30,7 +30,7 @@ $(document).ready(function(){
           data: {date: selectedDate}
         }).done(function(response) {
           console.log("THIS IS THE RESPONSE: " + response);
-          $('.eventList').html(response);
+          $('#eventList').val(response);
         });
 
       }
