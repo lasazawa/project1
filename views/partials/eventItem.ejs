@@ -15,10 +15,12 @@
       </p>
       <p><%= event.date %>, <%= event.location %></p>
     <% if(event.UsersFavShows.length === 0) { %>
-        <form id="favorite" action="/profile/favshow" method="POST">
-          <input name="UserId" type="hidden" value="<%=user.id %>">
-          <input name="FavShowId" type="hidden" value="<%=event.id %>">
-          <button id="favorite-btn" type="submit" class="btn-favorite"><span class="glyphicon glyphicon-star"></span>Like</button>
+          <form id="favorite" action="/profile/favshow" method="POST">
+            <input name="UserId" type="hidden" value="<%=user.id %>">
+            <input name="FavShowId" type="hidden" value="<%=event.id %>">
+            <button id="favorite-btn" type="submit" class="btn-favorite">
+              <span class="glyphicon glyphicon-star"></span>Like
+            </button>
           </form>
         <% } else { %>
         <% event.UsersFavShows.forEach(function(joinInstance){  %>
