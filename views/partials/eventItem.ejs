@@ -13,7 +13,7 @@
           <span> at <%= event.time %></span>
         <% } %>
       </p>
-      <p><%= event.date %>, <%= event.location %></p>
+      <p><%= event.location %> <span class="white"><%= event.date %></span></p>
     <% if(event.UsersFavShows.length === 0) { %>
           <form id="favorite" action="/profile/favshow" method="POST">
             <input name="UserId" type="hidden" value="<%=user.id %>">
