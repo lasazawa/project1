@@ -2,30 +2,40 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="header">Check out <%= listOfEvents.length %> shows happening</h2>
+                <h2 class="header">Check out
+                  <span id="num-of-events"> <% include ./num_events %> </span>
+                  shows happening
+
+                </h2>
             </div>
         </div>
     </div>
 </div>
 <div class="subnav subnav-date">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <span id class="datePicker">
-                        <p class="date white">
-                            <span class="glyphicon glyphicon-calendar" ></span>
-                                <input id="datepicker" type="hidden">
-                            Today, October 31
-                        </p>
-                    </a>
-                </span>
-                <span class="date primary-color-dark">in</span>
-                <span class="locationPicker">
-                    <a href="#">
-                        <p class="date white"><span class="glyphicon glyphicon-map-marker"></span>SF Bay Area</p>
-                    </a>
-                </span>
-            </div>
-        </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <span id="dateSelector">
+          <p>
+            <input id="datepicker" class="date" type="text" readonly='true'>
+          </p>
+        </span>
+
+        <span class="date primary-color-dark">in</span>
+        <span class="locationPicker">
+          <a href="#">
+            <p class="date white"><span class="glyphicon glyphicon-map-marker"></span>SF Bay Area</p>
+          </a>
+        </span>
+      </div>
     </div>
+  </div>
 </div>
+<!--
+
+<span class="datePicker">
+  <p class="date white">
+    <span class="glyphicon glyphicon-calendar" ></span>
+    Today, December 12
+  </p>
+</span> -->

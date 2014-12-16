@@ -133,8 +133,8 @@ app.get('/auth/spotify/callback',
 app.get('/', function(req, res) {
   db.FavShow.findAll({
     where: {
-      date: "2014-12-16"
-      // date: today
+      // date: "2014-12-11"
+      date: today
     }
     }).done(function(err, allConcerts) {
       console.log(err);
@@ -308,7 +308,7 @@ app.get('/populate', function(req, res) {
     var topTracks = [];
     var track = {};
     var finalTracks = [];
-    var allEvents = "http://api.songkick.com/api/3.0/metro_areas/26330-us-sf-bay-area/calendar.json?apikey=" + songkickKey + "&page=25";
+    var allEvents = "http://api.songkick.com/api/3.0/metro_areas/26330-us-sf-bay-area/calendar.json?apikey=" + songkickKey + "&page=3";
     var count;
 
     async.waterfall([
@@ -386,7 +386,7 @@ app.get('/populate', function(req, res) {
             }
         });
     },
-
+    // we are still missing 5.....
         function thirdCall(artistIds, artistNames, callback){
             count = 0;
             console.log("third call just ran");
@@ -418,6 +418,7 @@ app.get('/populate', function(req, res) {
                 console.log("Oops! Something went wrong", err);
             }
             else{
+                // this is 18....it should be higher :(
                 console.log(count);
               // this is the callback for async.waterfall (first parameter is if there is an error)
                 callback(null, allConcerts, topTracks, artistNames);
@@ -456,16 +457,21 @@ app.get('/populate', function(req, res) {
         ],
 
 
-        // another way to do this might be to findAll, if found then create, else update
+
         function final(err, allConcerts){
             console.log("final call ran");
             async.forEach(allConcerts, function(event,callback){
-              console.log(typeof event.performance[0]);
+              console.log(typeof event.performance[0])
               if(typeof event.performance[0] !== 'undefined'){
                 db.FavShow.findOrCreate({
                   where:{
                     artist: event.performance[0].displayName,
                     date: event.start.date
+                    // venue: event.venue.displayName,
+                    // time: event.start.time,
+                    // location: event.location.city,
+                    // track_id: event.uri,
+                    // event_id: event.id,
                   },
                   defaults:{
                     artist: event.performance[0].displayName,
@@ -474,30 +480,23 @@ app.get('/populate', function(req, res) {
                     time: event.start.time,
                     location: event.location.city,
                     track_id: event.uri,
-                    event_id: event.id
+                    event_id: event.id,
                     // artist_img: event.image
                   }
-                  // foundEvent all events above
-                }).success(function(foundEvent, created){
-                    console.log("CREATED");
-                    if (!created) {
-                      foundEvent.updateAttributes({
-                        track_id: event.uri
-                      });
-                      console.log("UPDATED");
-                    }
-                    callback();
-                  }, function(taco){
-                  res.render("home");
+                }).done(function(err,event){
+                  console.log(err)
+                  console.log("created");
+                callback();
+              }, function(taco){
+                res.render("home");
               });
-            } // end of if
+            }
             else {
               callback();
             }
-          }); // end async
+            });
 
-
-        } //end of final
+        }
     );
     });
 
