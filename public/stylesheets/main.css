@@ -185,6 +185,10 @@ a.primary-color:hover {
     margin-right: 6px;
 }
 
+#num-of-events > #num-of-events {
+    margin-right: none;
+}
+
 .subnav span#dateSelector #datepicker{
     color: white;
     border: none;
@@ -343,6 +347,7 @@ a:hover .jamtrkr {
 
 .eventList .eventList {
     border-top: none;
+    margin-top: 0px;
 }
 
 #eventHeader {

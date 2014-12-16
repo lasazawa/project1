@@ -133,8 +133,8 @@ app.get('/auth/spotify/callback',
 app.get('/', function(req, res) {
   db.FavShow.findAll({
     where: {
-      // date: "2014-12-11"
-      date: today
+      date: "2014-12-16"
+      // date: today
     }
     }).done(function(err, allConcerts) {
       console.log(err);
@@ -308,7 +308,7 @@ app.get('/populate', function(req, res) {
     var topTracks = [];
     var track = {};
     var finalTracks = [];
-    var allEvents = "http://api.songkick.com/api/3.0/metro_areas/26330-us-sf-bay-area/calendar.json?apikey=" + songkickKey + "&page=9";
+    var allEvents = "http://api.songkick.com/api/3.0/metro_areas/26330-us-sf-bay-area/calendar.json?apikey=" + songkickKey + "&page=25";
     var count;
 
     async.waterfall([
@@ -484,7 +484,7 @@ app.get('/populate', function(req, res) {
                       foundEvent.updateAttributes({
                         track_id: event.uri
                       });
-                      console.log("UDPATED");
+                      console.log("UPDATED");
                     }
                     callback();
                   }, function(taco){
