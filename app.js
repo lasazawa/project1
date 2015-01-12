@@ -133,8 +133,8 @@ app.get('/auth/spotify/callback',
 app.get('/', function(req, res) {
   db.FavShow.findAll({
     where: {
-      date: "2014-12-16"
-      // date: today
+      // date: "2014-12-16"
+      date: today
     }
     }).done(function(err, allConcerts) {
       console.log(err);
