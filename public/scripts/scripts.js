@@ -14,9 +14,15 @@ $(document).ready(function(){
 
   // // datepicker
   function dateHandler() {
+    // var todayFormatted = $.datepicker.formatDate("yy-mm-dd", today);
+    // console.log("todayFormatted: " + todayFormatted);
     var dateObject = $(this).datepicker('getDate');
+    // var dateObject = $(this).datepicker({
+    //   minDate: today
+    //   });
     var selectedDate = $.datepicker.formatDate( "yy-mm-dd", dateObject);
     var showDate = $.datepicker.formatDate("DD, MM d", dateObject);
+    // console.log("selectedDate: " + selectedDate + "  showDate: " + showDate);
     $(this).val(showDate);
     $(this).attr('size', $(this).val().length+6);
     var _this = $(this);

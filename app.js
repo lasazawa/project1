@@ -114,6 +114,7 @@ passport.use(new SpotifyStrategy({
   }
 ));
 
+
 // ------------------
 
 // Spotify auth
@@ -125,7 +126,7 @@ app.get('/auth/spotify',
 app.get('/auth/spotify/callback',
   passport.authenticate('spotify', { failureRedirect: '/login' }),
   function(req, res) {
-    console.log("WHAT????")
+    console.log("WHAT????");
     res.redirect('/home');
   });
 
@@ -133,7 +134,7 @@ app.get('/auth/spotify/callback',
 app.get('/', function(req, res) {
   db.FavShow.findAll({
     where: {
-      // date: "2014-12-16"
+      // date: "2014-01-16"
       date: today
     }
     }).done(function(err, allConcerts) {
@@ -308,7 +309,7 @@ app.get('/populate', function(req, res) {
     var topTracks = [];
     var track = {};
     var finalTracks = [];
-    var allEvents = "http://api.songkick.com/api/3.0/metro_areas/26330-us-sf-bay-area/calendar.json?apikey=" + songkickKey + "&page=25";
+    var allEvents = "http://api.songkick.com/api/3.0/metro_areas/26330-us-sf-bay-area/calendar.json?apikey=" + songkickKey + "&page=32";
     var count;
 
     async.waterfall([
